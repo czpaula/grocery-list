@@ -1,74 +1,72 @@
-# streamlit run c:/Users/bacop/Documents/GitHub/market-checklist/_main.py [ARGUMENTS]
-
 import streamlit as st
 import json
 import os
 
-PRODUTOS = 'produtos.json'
-CARRINHO ='carrinho.json'
+PRODUCTS_FILE = 'products.json'
+CART_FILE = 'cart.json'
 
-# Funções
-def carregar_produtos():
-    if os.path.exists(PRODUTOS):
-        with open(PRODUTOS, 'r', encoding='utf-8') as f:
+# Functions
+def load_products():
+    if os.path.exists(PRODUCTS_FILE):
+        with open(PRODUCTS_FILE, 'r', encoding='utf-8') as f:
             return json.load(f)
     else:
-        return "Lista vazia" 
+        return "Empty list"
 
-def carregar_carrinho():
-    if os.path.exists(CARRINHO):
-        with open(CARRINHO, 'r', encoding='utf-8') as f:
+def load_cart():
+    if os.path.exists(CART_FILE):
+        with open(CART_FILE, 'r', encoding='utf-8') as f:
             return json.load(f)            
     else:
-        return "Lista vazia"
+        return "Empty list"
     
-def salvar_carrinho(lista):
-    with open(CARRINHO, 'w', encoding='utf-8') as f:
-        json.dump(lista, f, ensure_ascii=False, indent=2)
+def save_cart(cart_list):
+    with open(CART_FILE, 'w', encoding='utf-8') as f:
+        json.dump(cart_list, f, ensure_ascii=False, indent=2)
 
-def adicionar_item(item_selec, qtd):
-    # lista = carregar_carrinho()
-    for item in lista:
-        if item == {"item": item_selec, "quantidade": f"{qtd}"}: 
-            st.error(f"⚠️ O item '{item_selec}' já está na lista. \n")
+def add_item(selected_item, quantity):
+    for item in cart_list:
+        if item == {"item": selected_item, "quantity": f"{quantity}"}: 
+            st.error(f"⚠️ The item '{selected_item}' is already in the list.\n")
             return
-    novo_item = {"item": item_selec, "quantidade": f"{qtd}"}
-    lista.append(novo_item)
-    salvar_carrinho(lista)
-    print(f"✅ Item '{item_selec} ({qtd})' adicionado!\n") 
+    new_item = {"item": selected_item, "quantity": f"{quantity}"}
+    cart_list.append(new_item)
+    save_cart(cart_list)
+    print(f"✅ Item '{selected_item} ({quantity})' added!\n") 
 
-def atualizar_lista():
-    # lista = carregar_carrinho()
-    for item in lista:
-            col1, col2 = st.columns([4, 1])
-            col1.write(f"{item["item"]} ({item.get('quantidade')})")
-            if col2.button("🗑️", key=item):
-                remover_item(item)
-                st.success(f"{item["item"]} ({item["quantidade"]}) foi excluído!") 
-                st.button("Ok")
+def update_cart_display():
+    for item in cart_list:
+        col1, col2 = st.columns([4, 1])
+        col1.write(f"{item['item']} ({item.get('quantity')})")
+        if col2.button("🗑️", key=str(item)):
+            remove_item(item)
+            st.success(f"{item['item']} ({item['quantity']}) was removed!") 
+            st.button("Ok")
 
-def remover_item(item):
-    lista.remove(item)
-    salvar_carrinho(lista)
+def remove_item(item):
+    cart_list.remove(item)
+    save_cart(cart_list)
 
-PRODUTOS = 'produtos.json'
-CARRINHO ='carrinho.json'
-lista = carregar_carrinho()
+# Load initial data
+cart_list = load_cart()
 
-st.set_page_config(page_title="Mercado", page_icon="🍳")
-st.title("🍳 Mercado")
-st.subheader("Lista de Compras")
-# Gera uma lista só com os valores do atributo 'item'
-p_json = carregar_produtos()
-p_itens = [dicionario['item'] for dicionario in p_json if 'item' in dicionario]
-# Input 
-item_selec = st.selectbox("Produto:",options=p_itens)
-# Input
-qtd = st.slider("Quantidade: ", min_value=1, max_value=20, value=1)
-# Button "Incluir"
-if st.button("Incluir"):
-    adicionar_item(item_selec, qtd)
-    # atualizar_lista()
-st.subheader("🛒 Lista de Compras")
-# lista = carregar_carrinho()
-atualizar_lista()
+st.set_page_config(page_title="Grocery Market", page_icon="🍳")
+st.title("🍳 Grocery Market")
+st.subheader("Shopping List")
+
+# Generate list of product names
+products_json = load_products()
+product_items = [product['item'] for product in products_json if 'item' in product]
+
+# Product selection
+selected_item = st.selectbox("Product:", options=product_items)
+
+# Quantity selection
+quantity = st.slider("Quantity:", min_value=1, max_value=20, value=1)
+
+# Button to add item
+if st.button("Add"):
+    add_item(selected_item, quantity)
+
+st.subheader("🛒 Current Shopping List")
+update_cart_display()

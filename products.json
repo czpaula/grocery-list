@@ -1,0 +1,23 @@
+[
+  {"item": "Rice", "category": "Grains"},
+  {"item": "Beans", "category": "Grains"},
+  {"item": "Pasta", "category": "Grains"},
+  {"item": "Wheat flour", "category": "Grains"},
+  {"item": "Soy oil", "category": "Oils"},
+  {"item": "Olive oil", "category": "Oils"},
+  {"item": "Salt", "category": "Seasonings"},
+  {"item": "Sugar", "category": "Seasonings"},
+  {"item": "Coffee", "category": "Drinks"},
+  {"item": "Milk", "category": "Dairy"},
+  {"item": "Cheese", "category": "Dairy"},
+  {"item": "Yogurt", "category": "Dairy"},
+  {"item": "Butter", "category": "Dairy"},
+  {"item": "Eggs", "category": "Dairy"},
+  {"item": "Sliced bread", "category": "Bakery"},
+  {"item": "Fresh bread", "category": "Bakery"},
+  {"item": "Cookies", "category": "Bakery"},
+  {"item": "Croissants", "category": "Bakery"},
+  {"item": "Soda", "category": "Drinks"},
+  {"item": "Juice", "category": "Drinks"},
+  {"item": "Mineral water", "category": "Drinks"}
+]
